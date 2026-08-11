@@ -91,7 +91,7 @@ window.CARTA_DATOS = {
     {"seccion": "bocadillos", "precio": "9,80", "alergenos": ["gluten"], "es": "Jamón ibérico", "ca": "Pernil ibèric", "en": "Iberian cured ham", "fr": "Jambon ibérique"},
     {"seccion": "bocadillos", "precio": "10,50", "alergenos": ["gluten", "lacteos"], "es": "Jamón ibérico con queso", "ca": "Pernil ibèric amb formatge", "en": "Iberian cured ham & Manchego cheese", "fr": "Jambon ibérique et fromage"},
     {"seccion": "bocadillos", "precio": "10,90", "alergenos": ["lacteos"], "es": "Lomo ibérico de bellota", "ca": "Llom ibèric de gla", "en": "Iberian cured loin", "fr": "Echine de porc ibérique de \"bellota\""},
-    {"seccion": "bocadillos", "precio": "8,80", "alergenos": ["gluten", "lacteos"], "es": "Queso Manchego (semi o seco)", "ca": "Formatge Manxec (semi o sec)", "en": "Manchego cheese", "fr": "Fromage \"Manchego\" (sec ou demi sec)"},
+    {"seccion": "bocadillos", "precio": "8,80", "alergenos": ["gluten", "lacteos"], "es": "Queso Manchego (Semi o seco)", "ca": "Formatge Manxec (Semi o sec)", "en": "Manchego cheese", "fr": "Fromage \"Manchego\" (Sec ou demi-sec)"},
     {"seccion": "bocadillos", "precio": "7,80", "alergenos": ["lacteos"], "es": "Chorizo picante de Zamora", "ca": "Xoriço picant de Zamora", "en": "Spicy chorizo", "fr": "Chorizo piquant de Zamora"},
     {"seccion": "bocadillos", "precio": "6,90", "alergenos": [], "es": "Fuet de Vic", "ca": "Fuet de Vic", "en": "Hard cured pork sausage", "fr": "Saucisse sèche de Vic"},
     {"seccion": "bocadillos", "precio": "8,00", "alergenos": ["gluten", "pescado"], "es": "Bonito en aceite o en escabeche", "ca": "Bonítol amb oli o amb escabetx", "en": "\"\"Bonito\"\" in olive oil or pickle", "fr": "Bonite à l’huile ou en escabèche"},
