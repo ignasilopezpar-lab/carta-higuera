@@ -76,7 +76,9 @@
   function tituloBloque(datos, bloque) {
     var t = (datos.titulos || TITULOS_POR_DEFECTO)[bloque] || TITULOS_POR_DEFECTO[bloque];
     if (!t) return '';
-    return '<p class="carta-titulo-grande">' + esc(t[cfg.idioma] || t.es) + '</p>';
+    /* el estilo va tambien en linea para que ningun CSS externo lo pise */
+    return '<p class="carta-titulo-grande" style="text-align:center;width:100%;' +
+           'font-size:35px;font-weight:400;color:#B98D4B">' + esc(t[cfg.idioma] || t.es) + '</p>';
   }
 
   var TITULO_LEYENDA = { es: 'Alérgenos', ca: 'Al·lèrgens', en: 'Allergens', fr: 'Allergènes' };
