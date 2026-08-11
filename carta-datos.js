@@ -8,21 +8,26 @@
 
 window.CARTA_DATOS = {
 
+  // Titulo grande que encabeza la bodega
+  titulos: {
+    vinos: {"es": "Bodega", "ca": "Celler", "en": "Cellar", "fr": "Vins"}
+  },
+
   secciones: {
     entrantes: {"es": "Entrantes", "ca": "Entrants", "en": "Starters", "fr": "Entrées"},
     tostadas: {"es": "Tostadas", "ca": "Torrades", "en": "Toast", "fr": "Tartines"},
-    mariscos: {"es": "Mariscos", "ca": "Marisc", "en": "Sea food", "fr": "Fruits de mer"},
-    pescados: {"es": "Pescados", "ca": "Peix", "en": "Fish", "fr": "Poissons"},
-    carnes: {"es": "Carnes", "ca": "Carn", "en": "Meat", "fr": "Viandes"},
+    mariscos: {"es": "Mariscos", "ca": "Marisc", "en": "Sea Food", "fr": "Fruits de Mer"},
+    pescados: {"es": "Pescados", "ca": "Peixos", "en": "Fish", "fr": "Poissons"},
+    carnes: {"es": "Carnes", "ca": "Carns", "en": "Meat", "fr": "Viandes"},
     postres: {"es": "Postres", "ca": "Postres", "en": "Desserts", "fr": "Desserts"},
     bocadillos: {"es": "Bocadillos", "ca": "Entrepans", "en": "Sandwiches", "fr": "Sandwichs"},
     rioja: {"es": "Rioja", "ca": "Rioja", "en": "Rioja", "fr": "Rioja"},
     ribera: {"es": "Ribera del Duero", "ca": "Ribera del Duero", "en": "Ribera del Duero", "fr": "Ribera del Duero"},
-    catalanes: {"es": "Vinos catalanes", "ca": "Vins catalans", "en": "Catalan wines", "fr": "Vins catalans"},
+    catalanes: {"es": "Cataluña", "ca": "Catalunya", "en": "Catalonia", "fr": "Catalogne"},
     blancos: {"es": "Blancos", "ca": "Blancs", "en": "Whites", "fr": "Blancs"},
     rosados: {"es": "Rosados", "ca": "Rosats", "en": "Rosés", "fr": "Rosés"},
     cavas: {"es": "Cavas", "ca": "Caves", "en": "Cavas", "fr": "Mousseux"},
-    copas: {"es": "Copas", "ca": "Copes", "en": "By the glass", "fr": "Au verre"}
+    copas: {"es": "Copas", "ca": "Copes", "en": "Glasses", "fr": "Verres"}
   },
 
   platos: [
