@@ -71,6 +71,14 @@
     moluscos:       { es: 'Moluscos', ca: 'Mol·luscs', en: 'Mollusc', fr: 'Mollusques' }
   };
 
+  var TITULOS_POR_DEFECTO = { vinos: { es: 'Bodega', ca: 'Celler', en: 'Cellar', fr: 'Vins' } };
+
+  function tituloBloque(datos, bloque) {
+    var t = (datos.titulos || TITULOS_POR_DEFECTO)[bloque] || TITULOS_POR_DEFECTO[bloque];
+    if (!t) return '';
+    return '<p class="carta-titulo-grande">' + esc(t[cfg.idioma] || t.es) + '</p>';
+  }
+
   var TITULO_LEYENDA = { es: 'Alérgenos', ca: 'Al·lèrgens', en: 'Allergens', fr: 'Allergènes' };
 
   /* --- Estilos -------------------------------------------------------- */
@@ -84,34 +92,43 @@
     var css = document.createElement('style');
     css.id = 'carta-css';
     css.textContent = [
-      '.carta *{font-family:"Futura-Light","Helvetica Neue",Helvetica,Arial,sans-serif;box-sizing:border-box}',
-      '.carta p{margin:0}',
-      '.carta-cols{display:flex;justify-content:space-between;gap:4%}',
+      /* Reproduccion exacta del CSS original de los embeds, con los nombres
+         de clase cambiados. No se resetean los margenes de los <p>: el
+         espaciado entre platos depende de ellos. */
+      '.carta *{font-family:"Futura-Light","Helvetica Neue",Helvetica,Arial,sans-serif}',
+      '.carta-cols{display:flex;justify-content:space-between}',
       '.carta-col{width:48%}',
-      '.carta .carta-titulo-grande{font-size:35px;font-weight:400;color:#B98D4B;text-align:center;margin-bottom:10px}',
-      '.carta-seccion{margin-bottom:30px}',
+      '.carta .carta-titulo-grande{font-size:35px;font-weight:400;color:#B98D4B;text-align:center}',
       '.carta .carta-titulo{font-size:30px;color:#B98D4B;font-weight:400;margin-bottom:-10px}',
       '.carta-linea{border-top:1px solid grey;height:2px;padding:0;margin:20px auto 0 auto}',
       '.carta-fila{width:100%;display:flex;flex-wrap:nowrap;justify-content:space-between;',
-      '  align-items:center;margin-bottom:2px;padding-top:8px}',
-      '.carta-nombre{max-width:72%;font-size:16px;font-weight:400;text-align:left}',
-      '.carta-puntos{flex-grow:1;border-bottom:1px dotted;margin:0 10px 6px 10px;min-width:18px}',
-      '.carta-precio{font-size:16px;font-weight:400;text-align:right;color:#B98D4B;white-space:nowrap}',
-      /* Futura-Light no incluye el simbolo del euro: se pinta aparte para
-         que no lo tome prestado de una fuente mas gruesa */
-      '.carta-euro{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:300;font-size:.92em;letter-spacing:.01em;margin-left:.18em}',
+      '  margin-bottom:-14px;align-items:center}',
+      '.carta-nombre{max-width:70%}',
+      '.carta-puntos{flex-grow:1;border-bottom:1px dotted;margin-bottom:15px;',
+      '  margin-right:10px;margin-left:10px}',
+      '.carta-nombre p{font-weight:400;text-align:left;font-size:16px}',
+      '.carta-puntos p{text-align:center;font-size:16px}',
+      '.carta-precio p{font-weight:400;text-align:right;font-size:16px;color:#B98D4B}',
+      '.carta-seccion{margin-bottom:30px}',
+      /* Futura-Light no incluye el simbolo del euro: se pinta aparte para que
+         no lo tome prestado de una fuente mas gruesa */
+      '.carta-euro{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:300;',
+      '  font-size:.92em;letter-spacing:.01em;margin-left:.18em}',
       '.carta-alerg{display:inline-flex;gap:4px;vertical-align:middle;margin-left:6px}',
       '.carta-alerg img{height:26px;width:26px;vertical-align:middle}',
       '.carta-leyenda{margin-top:30px;padding-top:14px;border-top:1px solid grey;',
       '  display:flex;flex-wrap:wrap;gap:10px 22px}',
       '.carta-leyenda div{display:flex;align-items:center;gap:7px;font-size:14px}',
       '.carta-leyenda img{height:26px;width:26px}',
-      /* pantallas estrechas y tablets: una sola columna y letra mas pequena */
+      /* maqueta movil forzada desde el embed */
+      '.carta-movil .carta-cols{display:block}',
+      '.carta-movil .carta-col{width:100%}',
+      '.carta-movil .carta-nombre p,.carta-movil .carta-puntos p,.carta-movil .carta-precio p{font-size:14px}',
+      /* pantallas estrechas y tablets: una columna y la letra de movil */
       '@media (max-width:820px){',
       '  .carta-cols{display:block}',
       '  .carta-col{width:100%}',
-      '  .carta-nombre,.carta-precio{font-size:14px}',
-      '  .carta-nombre{max-width:68%}',
+      '  .carta-nombre p,.carta-puntos p,.carta-precio p{font-size:14px}',
       '}'
     ].join('\n');
     document.head.appendChild(css);
@@ -135,7 +152,7 @@
   function fila(p) {
     return '<div class="carta-fila">' +
              '<div class="carta-nombre"><p>' + esc(p[cfg.idioma] || p.es) + iconos(p.alergenos) + '</p></div>' +
-             '<div class="carta-puntos"></div>' +
+             '<div class="carta-puntos"><p></p></div>' +
              '<div class="carta-precio"><p>' + esc(p.precio) + '<span class="carta-euro">€</span></p></div>' +
            '</div>';
   }
@@ -177,6 +194,7 @@
 
     bloques.forEach(function (b) {
       pintadas = pintadas.concat(MAQUETA.movil[b]);
+      html += tituloBloque(datos, b);
       if (movil) {
         html += MAQUETA.movil[b].map(function (k) { return seccion(k, datos); }).join('');
       } else {
@@ -189,7 +207,7 @@
     });
 
     if (cfg.leyenda) html += leyenda(datos, pintadas);
-    caja.className = 'carta';
+    caja.className = 'carta' + (movil ? ' carta-movil' : '');
     caja.innerHTML = html;
   }
 
