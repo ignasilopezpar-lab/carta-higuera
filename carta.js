@@ -1,6 +1,6 @@
 /* ===================================================================
    CARTA LA HIGUERA - MOTOR DE PINTADO
-   VERSION 2026-08-12-c
+   VERSION 2026-08-12-d
    No hace falta tocar este fichero para cambiar precios ni platos.
    Todo el contenido vive en carta-datos.js
    ===================================================================
@@ -17,7 +17,7 @@
    =================================================================== */
 
 (function () {
-  window.CARTA_MOTOR_VERSION = '2026-08-12-c';
+  window.CARTA_MOTOR_VERSION = '2026-08-12-d';
   var s = document.currentScript;
   var cfg = {
     idioma:  (s && s.dataset.idioma)  || 'es',
@@ -50,10 +50,9 @@
     huevo:          'https://static.wixstatic.com/shapes/efb83a_a8f36bccae42408b8f7e53658a11196a.svg',
     pescado:        'https://static.wixstatic.com/shapes/efb83a_eee37a3890584bc593fce20e5e9657b8.svg',
     cacahuete:      'https://static.wixstatic.com/shapes/efb83a_581247635cb04085899415b1bc54cae4.svg',
-    soja:           'https://static.wixstatic.com/media/efb83a_c5a7a986bb9745b8a63abb41da7610ee~mv2.jpg/v1/fill/w_30,h_23,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/efb83a_c5a7a986bb9745b8a63abb41da7610ee~mv2.jpg',
+    soja:           'https://static.wixstatic.com/shapes/efb83a_af96849a9b1b4417bcbb93bd65c78a83.svg',
     lacteos:        'https://static.wixstatic.com/shapes/efb83a_8f977c22da2b46df816749cd27f450dd.svg',
     frutos_cascara: 'https://static.wixstatic.com/shapes/efb83a_5c0da905121c494c96a907d53aa15d24.svg',
-    apio:           'https://static.wixstatic.com/shapes/efb83a_af96849a9b1b4417bcbb93bd65c78a83.svg',
     sulfitos:       'https://static.wixstatic.com/shapes/efb83a_f9d94ceac8104c94ae12eb353c1a146d.svg',
     moluscos:       'https://static.wixstatic.com/shapes/efb83a_9243d3c7dd59458bb0b289acf2661f8e.svg'
   };
@@ -61,16 +60,29 @@
   var NOMBRES = {
     gluten:         { es: 'Gluten', ca: 'Gluten', en: 'Gluten', fr: 'Gluten' },
     crustaceos:     { es: 'Crustáceos', ca: 'Crustacis', en: 'Crustaceans', fr: 'Crustacés' },
-    huevo:          { es: 'Huevos', ca: 'Ous', en: 'Eggs', fr: 'Oeufs' },
+    huevo:          { es: 'Huevo', ca: 'Ous', en: 'Eggs', fr: 'Œufs' },
     pescado:        { es: 'Pescado', ca: 'Peix', en: 'Fish', fr: 'Poisson' },
-    cacahuete:      { es: 'Cacahuete', ca: 'Cacauet', en: 'Peanut', fr: 'Cacahouète' },
-    soja:           { es: 'Soja', ca: 'Soia', en: 'Soya', fr: 'Soja' },
-    lacteos:        { es: 'Lácteos', ca: 'Làctics', en: 'Milk', fr: 'Produits laitiers' },
-    frutos_cascara: { es: 'Frutos de cáscara', ca: 'Fruits de closca', en: 'Nuts', fr: 'Fruits à coque' },
-    apio:           { es: 'Apio', ca: 'Api', en: 'Celery', fr: 'Céleri' },
+    cacahuete:      { es: 'Cacahuetes', ca: 'Cacauets', en: 'Peanuts', fr: 'Cacahuètes' },
+    soja:           { es: 'Soja', ca: 'Soja', en: 'Soy', fr: 'Soja' },
+    lacteos:        { es: 'Lactosa', ca: 'Lactosa', en: 'Dairy', fr: 'Produits laitiers' },
+    frutos_cascara: { es: 'Frutos de cáscara', ca: 'Fruita de closca', en: 'Nuts', fr: 'Fruits à coque' },
     sulfitos:       { es: 'Dióxido de azufre y sulfitos', ca: 'Diòxid de sofre i sulfits',
-                      en: 'Sulfur dioxide & sulphites', fr: 'Dioxyde de soufre et sulfites' },
-    moluscos:       { es: 'Moluscos', ca: 'Mol·luscs', en: 'Mollusc', fr: 'Mollusques' }
+                      en: 'Sulfur dioxide and sulfites', fr: 'Dioxyde de soufre et sulfites' },
+    moluscos:       { es: 'Moluscos', ca: 'Mol·luscs', en: 'Molluscs', fr: 'Mollusques' }
+  };
+
+  var TAM = { lacteos: 25, pescado: 35, frutos_cascara: 35 };   // el resto, 30px
+
+  /* Reparto de la leyenda tal y como estaba en la web: dos grupos de
+     dos columnas. En escritorio van uno al lado del otro; en movil,
+     uno debajo del otro. */
+  var LEYENDA = [
+    [['gluten', 'huevo'], ['pescado', 'frutos_cascara'], ['soja']],
+    [['lacteos', 'cacahuete'], ['crustaceos', 'sulfitos'], ['moluscos']]
+  ];
+
+  var NOMBRES_CORTOS = {
+    sulfitos: { es: 'Sulfitos', ca: 'Sulfits', en: 'Sulfites', fr: 'Sulfites' }
   };
 
   var TITULOS_POR_DEFECTO = { vinos: { es: 'Bodega', ca: 'Celler', en: 'Cellar', fr: 'Vins' } };
@@ -120,10 +132,22 @@
       '  font-size:.92em;letter-spacing:.01em;margin-left:.18em}',
       '.carta-alerg{display:inline-flex;gap:4px;vertical-align:middle;margin-left:6px}',
       '.carta-alerg img{height:26px;width:26px;vertical-align:middle}',
-      '.carta-leyenda{margin-top:30px;padding-top:14px;border-top:1px solid grey;',
-      '  display:flex;flex-wrap:wrap;gap:10px 22px}',
-      '.carta-leyenda div{display:flex;align-items:center;gap:7px;font-size:14px}',
-      '.carta-leyenda img{height:26px;width:26px}',
+      '.carta-leyenda{margin-top:34px}',
+      '.carta-leyenda-grupos{display:flex}',
+      '.carta-leyenda-grupo{width:50%}',
+      '.carta-leyenda-fila{width:100%;display:flex;justify-content:center}',
+      '.carta-leyenda-item{width:100%;display:flex;flex-wrap:wrap;align-items:center;gap:7px}',
+      '.carta-leyenda-texto{font-size:16px;font-weight:400}',
+      '.carta-movil .carta-leyenda-grupos{display:block}',
+      '.carta-movil .carta-leyenda-grupo{width:100%}',
+      '.carta-movil .carta-leyenda-item{width:50%}',
+      '.carta-movil .carta-leyenda-texto{font-size:14px}',
+      '@media (max-width:820px){',
+      '  .carta-leyenda-grupos{display:block}',
+      '  .carta-leyenda-grupo{width:100%}',
+      '  .carta-leyenda-item{width:50%}',
+      '  .carta-leyenda-texto{font-size:14px}',
+      '}',
       /* maqueta movil forzada desde el embed */
       '.carta-movil .carta-cols{display:block}',
       '.carta-movil .carta-col{width:100%}',
@@ -172,17 +196,28 @@
            '</div>';
   }
 
-  function leyenda(datos, secciones) {
-    var usados = [];
-    datos.platos.forEach(function (p) {
-      if (secciones.indexOf(p.seccion) < 0) return;
-      (p.alergenos || []).forEach(function (a) { if (usados.indexOf(a) < 0) usados.push(a); });
+  function leyenda(movil) {
+    var html = '<div class="carta-leyenda"><div class="carta-leyenda-grupos">';
+    LEYENDA.forEach(function (grupo) {
+      html += '<div class="carta-leyenda-grupo">';
+      grupo.forEach(function (fila) {
+        html += '<div class="carta-leyenda-fila">';
+        fila.forEach(function (a) {
+          var corto = movil && NOMBRES_CORTOS[a];
+          var n = esc(((corto || NOMBRES[a]) || {})[cfg.idioma] || a);
+          var px = TAM[a] || 30;
+          html += '<div class="carta-leyenda-item">' +
+                    '<img src="' + ICONOS[a] + '" alt="' + n + '" ' +
+                         'height="' + px + '" width="' + px + '">' +
+                    '<p class="carta-leyenda-texto">' + n + '</p>' +
+                  '</div>';
+        });
+        if (fila.length === 1) html += '<div class="carta-leyenda-item"></div>';
+        html += '</div>';
+      });
+      html += '</div>';
     });
-    var items = usados.filter(function (a) { return ICONOS[a]; }).map(function (a) {
-      var n = esc((NOMBRES[a] || {})[cfg.idioma] || a);
-      return '<div><img src="' + ICONOS[a] + '" alt="' + n + '"><span>' + n + '</span></div>';
-    }).join('');
-    return '<div class="carta-leyenda">' + items + '</div>';
+    return html + '</div></div>';
   }
 
   function pintar() {
@@ -194,10 +229,9 @@
     var movil = cfg.maqueta === 'movil' ||
                 (cfg.maqueta === 'auto' && (window.innerWidth || 1024) <= 820);
     var bloques = cfg.bloque === 'todo' ? ['comida', 'vinos'] : [cfg.bloque];
-    var html = '', pintadas = [];
+    var html = '';
 
     bloques.forEach(function (b) {
-      pintadas = pintadas.concat(MAQUETA.movil[b]);
       html += tituloBloque(datos, b);
       if (movil) {
         html += MAQUETA.movil[b].map(function (k) { return seccion(k, datos); }).join('');
@@ -210,7 +244,7 @@
       }
     });
 
-    if (cfg.leyenda) html += leyenda(datos, pintadas);
+    if (cfg.leyenda) html += leyenda(movil);
     caja.className = 'carta' + (movil ? ' carta-movil' : '');
     caja.innerHTML = html;
   }
