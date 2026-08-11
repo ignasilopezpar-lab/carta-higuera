@@ -84,7 +84,7 @@
     var css = document.createElement('style');
     css.id = 'carta-css';
     css.textContent = [
-      '.carta *{font-family:"Futura-Light",Futura,"Century Gothic",sans-serif;box-sizing:border-box}',
+      '.carta *{font-family:"Futura-Light","Helvetica Neue",Helvetica,Arial,sans-serif;box-sizing:border-box}',
       '.carta p{margin:0}',
       '.carta-cols{display:flex;justify-content:space-between;gap:4%}',
       '.carta-col{width:48%}',
@@ -97,6 +97,9 @@
       '.carta-nombre{max-width:72%;font-size:16px;font-weight:400;text-align:left}',
       '.carta-puntos{flex-grow:1;border-bottom:1px dotted;margin:0 10px 6px 10px;min-width:18px}',
       '.carta-precio{font-size:16px;font-weight:400;text-align:right;color:#B98D4B;white-space:nowrap}',
+      /* Futura-Light no incluye el simbolo del euro: se pinta aparte para
+         que no lo tome prestado de una fuente mas gruesa */
+      '.carta-euro{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:300;font-size:.92em;letter-spacing:.01em;margin-left:.18em}',
       '.carta-alerg{display:inline-flex;gap:4px;vertical-align:middle;margin-left:6px}',
       '.carta-alerg img{height:26px;width:26px;vertical-align:middle}',
       '.carta-leyenda{margin-top:30px;padding-top:14px;border-top:1px solid grey;',
@@ -133,7 +136,7 @@
     return '<div class="carta-fila">' +
              '<div class="carta-nombre"><p>' + esc(p[cfg.idioma] || p.es) + iconos(p.alergenos) + '</p></div>' +
              '<div class="carta-puntos"></div>' +
-             '<div class="carta-precio"><p>' + esc(p.precio) + '€</p></div>' +
+             '<div class="carta-precio"><p>' + esc(p.precio) + '<span class="carta-euro">€</span></p></div>' +
            '</div>';
   }
 
