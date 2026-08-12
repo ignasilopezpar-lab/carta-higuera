@@ -17,8 +17,10 @@
    =================================================================== */
 
 (function () {
-  window.CARTA_MOTOR_VERSION = '2026-08-12-g';
+  window.CARTA_MOTOR_VERSION = '2026-08-12-j';
   var s = document.currentScript;
+  /* carpeta donde vive este fichero, para cargar la fuente desde el mismo sitio */
+  var BASE = (s && s.src) ? s.src.replace(/[^/]*$/, '') : '';
   var cfg = {
     idioma:  (s && s.dataset.idioma)  || 'es',
     vista:   (s && s.dataset.vista)   || 'carta',
@@ -101,10 +103,6 @@
   /* --- Estilos -------------------------------------------------------- */
   function estilos() {
     if (document.getElementById('carta-css')) return;
-    var f = document.createElement('link');
-    f.rel = 'stylesheet';
-    f.href = 'https://db.onlinewebfonts.com/c/2167e76f00e569cc11b3665679996380?family=Futura-Light';
-    document.head.appendChild(f);
 
     var css = document.createElement('style');
     css.id = 'carta-css';
@@ -112,6 +110,12 @@
       /* Reproduccion exacta del CSS original de los embeds, con los nombres
          de clase cambiados. No se resetean los margenes de los <p>: el
          espaciado entre platos depende de ellos. */
+      /* Futura-Light, la misma tipografia que el resto de la web. Se sirve
+         desde la misma carpeta que este fichero: ni una peticion a otro
+         servidor. Si faltara el fichero, tira de la copia de origen. */
+      '@font-face{font-family:"Futura-Light";font-display:swap;font-weight:normal;font-style:normal;',
+      '  src:url("' + BASE + 'futura-light.woff2") format("woff2"),',
+      '      url("https://db.onlinewebfonts.com/t/2167e76f00e569cc11b3665679996380.woff2") format("woff2");}',
       '.carta *{font-family:"Futura-Light","Helvetica Neue",Helvetica,Arial,sans-serif}',
       '.carta-cols{display:flex;justify-content:space-between}',
       '.carta-col{width:48%}',
