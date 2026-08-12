@@ -1,6 +1,6 @@
 /* ===================================================================
    CARTA LA HIGUERA - DATOS
-   VERSION 2026-08-12-d
+   VERSION 2026-08-12-e
    Este es el UNICO fichero que hay que tocar para cambiar precios.
    Cada plato es una linea: cambia el numero de 'precio' y ya esta.
    Los nombres son los de la web, con las erratas de traduccion
@@ -10,7 +10,7 @@
    soja, lacteos, frutos_cascara, apio, sulfitos, moluscos
    =================================================================== */
 
-window.CARTA_DATOS_VERSION = '2026-08-12-d';
+window.CARTA_DATOS_VERSION = '2026-08-12-e';
 
 window.CARTA_DATOS = {
 
@@ -96,7 +96,7 @@ window.CARTA_DATOS = {
     {"seccion": "postres", "precio": "7,00", "alergenos": ["frutos_cascara", "lacteos", "cacahuete"], "es": "Sorbete de limón", "ca": "Sorbet de llimona", "en": "Lemon sorbet", "fr": "Sorbet au citron"},
     {"seccion": "postres", "precio": "6,00", "alergenos": ["frutos_cascara", "huevo", "lacteos", "gluten"], "es": "Tarta de Santiago", "ca": "Pastís de Santiago", "en": "St. James cake", "fr": "Tarte St. Jacques"},
     {"seccion": "postres", "precio": "7,50", "alergenos": ["frutos_cascara", "lacteos", "soja"], "es": "Trufas heladas", "ca": "Trufes gelades", "en": "Iced truffles (choco)", "fr": "Truffes glacées"},
-    {"seccion": "postres", "precio": "6,00", "alergenos": [], "es": "Helado de la casa", "ca": "Gelats de la casa", "en": "Ice cream", "fr": "Glaces"},
+    {"seccion": "postres", "precio": "6,00", "alergenos": ["frutos_cascara", "huevo", "lacteos"], "es": "Helado de la casa", "ca": "Gelats de la casa", "en": "Ice cream", "fr": "Glaces"},
 
     // ---------- BOCADILLOS ----------
     {"seccion": "bocadillos", "precio": "9,80", "alergenos": ["gluten"], "es": "Jamón ibérico", "ca": "Pernil ibèric", "en": "Iberian ham", "fr": "Jambon ibérique"},
