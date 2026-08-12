@@ -1,6 +1,6 @@
 /* ===================================================================
    CARTA LA HIGUERA - MOTOR DE PINTADO
-   VERSION 2026-08-12-e
+   VERSION 2026-08-12-g
    No hace falta tocar este fichero para cambiar precios ni platos.
    Todo el contenido vive en carta-datos.js
    ===================================================================
@@ -17,7 +17,7 @@
    =================================================================== */
 
 (function () {
-  window.CARTA_MOTOR_VERSION = '2026-08-12-e';
+  window.CARTA_MOTOR_VERSION = '2026-08-12-g';
   var s = document.currentScript;
   var cfg = {
     idioma:  (s && s.dataset.idioma)  || 'es',
@@ -25,6 +25,7 @@
     bloque:  (s && s.dataset.bloque)  || 'todo',
     maqueta: (s && s.dataset.maqueta) || 'auto',
     leyenda: (s && s.dataset.leyenda) === 'si',
+    medir:   (s && s.dataset.medir)   === 'si',
     destino: (s && s.dataset.destino) || '#carta'
   };
 
@@ -130,8 +131,13 @@
          no lo tome prestado de una fuente mas gruesa */
       '.carta-euro{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:300;',
       '  font-size:.92em;letter-spacing:.01em;margin-left:.18em}',
-      '.carta-alerg{display:inline-flex;gap:4px;vertical-align:middle;margin-left:6px}',
-      '.carta-alerg img{height:26px;width:26px;vertical-align:middle}',
+      /* en la vista de alergenos, los iconos van en su propia columna al lado
+         del nombre, centrados, para que no caigan sueltos a la linea de abajo */
+      '.carta-alergenos .carta-nombre{display:flex;align-items:center;gap:8px}',
+      '.carta-alerg{display:flex;gap:5px;flex:0 0 auto;align-items:center}',
+      '.carta-alerg img{height:25px;width:25px}',
+      '.carta-movil .carta-alerg img{height:22px;width:22px}',
+      '@media (max-width:820px){.carta-alerg img{height:22px;width:22px}}',
       '.carta-leyenda{margin-top:34px}',
       '.carta-leyenda-grupos{display:flex}',
       '.carta-leyenda-grupo{width:50%}',
@@ -152,11 +158,15 @@
       '.carta-movil .carta-cols{display:block}',
       '.carta-movil .carta-col{width:100%}',
       '.carta-movil .carta-nombre p,.carta-movil .carta-puntos p,.carta-movil .carta-precio p{font-size:14px}',
+      '.carta-movil .carta-nombre{max-width:76%}',
+      '.carta-movil .carta-puntos{margin-right:6px;margin-left:6px;min-width:14px}',
       /* pantallas estrechas y tablets: una columna y la letra de movil */
       '@media (max-width:820px){',
       '  .carta-cols{display:block}',
       '  .carta-col{width:100%}',
       '  .carta-nombre p,.carta-puntos p,.carta-precio p{font-size:14px}',
+      '  .carta-nombre{max-width:76%}',
+      '  .carta-puntos{margin-right:6px;margin-left:6px;min-width:14px}',
       '}'
     ].join('\n');
     document.head.appendChild(css);
@@ -179,7 +189,7 @@
 
   function fila(p) {
     return '<div class="carta-fila">' +
-             '<div class="carta-nombre"><p>' + esc(p[cfg.idioma] || p.es) + iconos(p.alergenos) + '</p></div>' +
+             '<div class="carta-nombre"><p>' + esc(p[cfg.idioma] || p.es) + '</p>' + iconos(p.alergenos) + '</div>' +
              '<div class="carta-puntos"><p></p></div>' +
              '<div class="carta-precio"><p>' + esc(p.precio) + '<span class="carta-euro">€</span></p></div>' +
            '</div>';
@@ -245,8 +255,26 @@
     });
 
     if (cfg.leyenda) html += leyenda(movil);
-    caja.className = 'carta' + (movil ? ' carta-movil' : '');
+    caja.className = 'carta' + (movil ? ' carta-movil' : '') +
+                     (cfg.vista === 'alergenos' ? ' carta-alergenos' : '');
     caja.innerHTML = html;
+    setTimeout(medir, 60);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { setTimeout(medir, 60); });
+  }
+
+  /* Modo medicion: pinta en pantalla la altura real que ocupa el contenido,
+     para poder ajustar la altura del componente en el editor de Wix. */
+  function medir() {
+    if (!cfg.medir) return;
+    var alto = Math.ceil(document.documentElement.scrollHeight);
+    var ancho = Math.ceil(window.innerWidth);
+    var caja = document.getElementById('carta-medida') || document.createElement('div');
+    caja.id = 'carta-medida';
+    caja.setAttribute('style', 'position:fixed;left:8px;bottom:8px;z-index:9999;' +
+      'background:#B98D4B;color:#fff;font:14px/1.3 Helvetica,Arial,sans-serif;' +
+      'padding:8px 12px;border-radius:6px');
+    caja.textContent = 'alto ' + alto + ' px · ancho ' + ancho + ' px';
+    if (!caja.parentNode) document.body.appendChild(caja);
   }
 
   estilos();
