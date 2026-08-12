@@ -1,6 +1,6 @@
 /* ===================================================================
    CARTA LA HIGUERA - MOTOR DE PINTADO
-   VERSION 2026-08-12-g
+   VERSION 2026-08-12-k
    No hace falta tocar este fichero para cambiar precios ni platos.
    Todo el contenido vive en carta-datos.js
    ===================================================================
@@ -17,7 +17,7 @@
    =================================================================== */
 
 (function () {
-  window.CARTA_MOTOR_VERSION = '2026-08-12-j';
+  window.CARTA_MOTOR_VERSION = '2026-08-12-k';
   var s = document.currentScript;
   /* carpeta donde vive este fichero, para cargar la fuente desde el mismo sitio */
   var BASE = (s && s.src) ? s.src.replace(/[^/]*$/, '') : '';
@@ -259,6 +259,8 @@
     });
 
     if (cfg.leyenda) html += leyenda(movil);
+    /* quita el estilo del mensaje de carga que trae el embed */
+    caja.removeAttribute('style');
     caja.className = 'carta' + (movil ? ' carta-movil' : '') +
                      (cfg.vista === 'alergenos' ? ' carta-alergenos' : '');
     caja.innerHTML = html;
